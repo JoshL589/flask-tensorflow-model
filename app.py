@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import numpy as np
 import tensorflow as tf
-import io
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
@@ -13,7 +12,6 @@ model = tf.keras.models.load_model("model.h5")
 def predict():
     # Get the image file from the request
     image_file = request.files['image']
-    image_bytes = io.BytesIO(image_file.read())
     # Open the image using pillow
     img = Image.open(image_file)
     # Perform any processing you want on the image using pillow
@@ -42,4 +40,3 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
