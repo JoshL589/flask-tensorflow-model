@@ -6,7 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 # Load your Tensorflow model
-model = tf.keras.models.load_model("model.h5")
+model = tf.keras.models.load_model("oldmodel.h5")
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -23,18 +23,19 @@ def predict():
     test_image = np.expand_dims(test_image, axis=0) # add an extra dimension for batch size
 
     predictions = model.predict(test_image)
-    predicted_classes = np.argmax(predictions, axis=1)
-    predictions_percentage = predictions*100
-    predictions_percentage = np.round(predictions_percentage, 2)
 
     class_names = ['bee', 'bowtie', 'butterfly', 'cat', 'diamond', 'eye', 'mushroom', 'octopus', 'popsicle', 'snowman']
-
+    predictions_percentage = predictions * 100
+    predictions_percentage = np.round(predictions_percentage, 2)
+    predicted_classes = np.argmax(predictions, axis=1)
     predicted_class = class_names[predicted_classes[0]]
     confidence = predictions_percentage[0][predicted_classes[0]]
-
+    all_predictions = []
+    for i in range(len(predictions[0])):
+        all_predictions.append({"class_name": class_names[i], "confidence": str(predictions_percentage[0][i]) + "%"})
     print("Model is predicting class " + predicted_class + " with " + str(confidence) + "% confidence.")
     # Return the predictions as a json
-    return jsonify({'predictions': predictions.tolist(), 'predicted_class': predicted_class, 'confidence': str(confidence)})
+    return jsonify({'predictions': all_predictions, 'predicted_class': predicted_class, 'confidence': str(confidence)})
 
 
 
