@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import numpy as np
 import tensorflow as tf
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
 # Load your Tensorflow model
 model = tf.keras.models.load_model("oldmodel.h5")
