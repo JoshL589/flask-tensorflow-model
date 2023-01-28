@@ -16,8 +16,24 @@ def predict():
     # Open the image using pillow
     img = Image.open(image_file)
     # Perform any processing you want on the image using pillow
-    img = img.resize((28, 28))
-    img.save("temp.png")
+
+    # Get the bounding box coordinates
+    left, upper, right, lower = img.getbbox()
+
+    dimension = max(abs(left-right), abs(upper-lower))
+    cropped_img = img.crop((left, upper, left+dimension, upper+dimension))
+
+    cropped_img.show()
+    cropped_img.save('ya.png')
+    width, height = cropped_img.size
+
+    bg = Image.new('RGB', (width, height), (255, 255, 255))
+    bg.paste(cropped_img, (0, 0), cropped_img)
+
+    # save the cropped image
+    im_cropped = bg.resize((28, 28))
+    im_cropped.save("temp.png")
+    
     # Make predictions using the Tensorflow model and add same preprocessing as I did for training
     test_image = tf.keras.preprocessing.image.load_img('temp.png', color_mode="grayscale", target_size=(28, 28))
     test_image = tf.keras.preprocessing.image.img_to_array(test_image)
