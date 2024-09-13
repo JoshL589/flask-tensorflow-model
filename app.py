@@ -4,7 +4,6 @@ import numpy as np
 import tensorflow as tf
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load your Tensorflow model
