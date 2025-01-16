@@ -53,3 +53,6 @@ def predict():
     print("Model is predicting class " + predicted_class + " with " + str(confidence) + "% confidence.")
     # Return the predictions as a json
     return jsonify({'predictions': all_predictions, 'predicted_class': predicted_class, 'confidence': str(confidence)})
+
+if __name__ == '__main__':
+    app.run(debug=False)
