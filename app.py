@@ -9,6 +9,10 @@ CORS(app)
 # Load your Tensorflow model
 model = tf.keras.models.load_model("oldmodel.h5")
 
+@app.route('/')
+def home():
+    return "Flask model API is running. Please use /predict to make predictions."
+
 @app.route('/predict', methods=['POST'])
 def predict():
     # Get the image file from the request
